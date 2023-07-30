@@ -1,0 +1,27 @@
+Step 1) To analyse the dependency in a c file 
+	$ clang analyze.ll -o analyze
+	$ ./analyze in.c
+	$ python3 analyze_on_raw.py
+		OR
+	$ sh run_analysis.sh
+
+Step 2) To compile the llvm pass
+	$ clang++ pass.cpp -fPIC -shared -o pass.so `llvm-config —cxxflags —ldflags —libs` -fno-rtti
+	$ opt -enable-new-pm=0 -load ./pass.so -f -tsx < in.ll > out.ll
+
+Step 3) run the output
+	$ clang out.ll -o out
+	$ ./out 
+		OR
+	$ lli out.ll
+
+
+
+
+#NOTE : IF WE RUN THE ABOVE PROCESS WITHOUT RUNNING THE ANALYSIS PART(STEP 1) ,EACH THREAD IN THE OUTPUT WILL THEN RUN SIMULTANEOUSLY WITHOUT STEP FOR DEPENDENCIES , STEP 1 IS IMPORTANT TO BE PERFORMED FOR OUTPUT TO AVOID THE CACHE SIDE CHANNEL ATTACKS
+
+#requirements : clang/clang++ , python3 , llvm-14 
+
+
+	
+ 
